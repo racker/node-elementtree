@@ -196,3 +196,12 @@ exports['test_tostring'] = function(test, assert) {
   assert.equal(et.tostring(c, { 'xml_declaration': false }), '<c>543</c>');
   test.finish();
 };
+
+exports['test_escape'] = function(test, assert) {
+  var a = Element('a');
+  var b = SubElement(a, 'b');
+  b.text = '&&&&<>"\n\r';
+
+  assert.equal(et.tostring(a, { 'xml_declaration': false }), '<a><b>&amp;&amp;&amp;&amp;&lt;&gt;&quot;&#xA;&#xD;</b></a>');
+  test.finish();
+};

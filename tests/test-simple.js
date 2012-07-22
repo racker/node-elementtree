@@ -125,6 +125,35 @@ exports['test_create_tree_and_parse_simple'] = function(test, assert) {
   test.finish();
 };
 
+exports['test_write_with_options'] = function(test, assert) {
+  var i = 0;
+  var e = new Element('bar', {});
+  var expected = "<?xml version='1.0' encoding='utf-8'?>\n" +
+    '<bar>\n' +
+    '    <blah a="11" />\n' +
+    '    <blah a="12" />\n' +
+    '    <gag a="13" b="abc">\n' +
+    '        ponies\n' +
+    '    </gag>\n' +
+    '</bar>\n';
+
+  SubElement(e, "blah", {a: 11});
+  SubElement(e, "blah", {a: 12});
+  var se = et.SubElement(e, "gag", {a: '13', b: 'abc'});
+  se.text = 'ponies';
+
+  se.itertext(function(text) {
+    assert.equal(text, 'ponies');
+    i++;
+  });
+
+  assert.equal(i, 1);
+  var etree = new ElementTree(e);
+  var xml = etree.write({prettyprint: true});
+  assert.equal(xml, expected);
+  test.finish();
+};
+
 exports['test_parse_and_find_2'] = function(test, assert) {
   var data = readFile('xml1.xml');
   var etree = et.parse(data);

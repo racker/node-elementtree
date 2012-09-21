@@ -145,6 +145,21 @@ exports['test_write_with_options'] = function(test, assert) {
     '  <gag a="13" b="abc">ponies</gag>\n' +
     '</bar>\n';
 
+    var expected3 = "<?xml version='1.0' encoding='utf-8'?>\n" +
+    '<object>\n' +
+    '    <title>\n' +
+    '        Hello World\n' +
+    '    </title>\n' +
+    '    <children>\n' +
+    '        <object id="obj1" />\n' +
+    '        <object id="obj2" />\n' +
+    '        <object id="obj3" />\n' +
+    '    </children>\n' +
+    '    <text>\n' +
+    '        Test &amp; Test &amp; Test\n' +
+    '    </text>\n' +
+    '</object>\n';
+
   var se1 = SubElement(e, "blah", {a: 11});
   var se2 = SubElement(se1, "baz", {d: 11});
   se2.text = 'test';
@@ -163,6 +178,11 @@ exports['test_write_with_options'] = function(test, assert) {
   var xml2 = etree.write({'indent': 2});
   assert.equal(xml1, expected1);
   assert.equal(xml2, expected2);
+
+  var file = readFile('xml2.xml');
+  var etree2 = et.parse(file);
+  var xml3 = etree2.write({'indent': 4});
+  assert.equal(xml3, expected3);
   test.finish();
 };
 
@@ -243,6 +263,6 @@ exports['test_escape'] = function(test, assert) {
   var b = SubElement(a, 'b');
   b.text = '&&&&<>"\n\r';
 
-  assert.equal(et.tostring(a, { 'xml_declaration': false }), '<a><b>&amp;&amp;&amp;&amp;&lt;&gt;\"&#xA;&#xD;</b></a>');
+  assert.equal(et.tostring(a, { 'xml_declaration': false }), '<a><b>&amp;&amp;&amp;&amp;&lt;&gt;\"\n\r</b></a>');
   test.finish();
 };

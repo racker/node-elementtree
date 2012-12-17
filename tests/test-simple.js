@@ -256,6 +256,20 @@ exports['test_register_namespace'] = function(test, assert){
   test.finish();
 };
 
+exports['test_clark_parse_element'] = function(test, assert) {
+  assert.equal(XML('<foo/>').tag, 'foo',
+               '<foo/> tag should be foo');
+  assert.equal(XML('<foo xmlns="bar"/>').tag, '{bar}foo',
+               '<foo xmlns="bar"/> tag should be {bar}foo');
+  assert.equal(XML('<quux:foo xmlns:quux="bar"/>').tag, '{bar}foo',
+               '<quux:foo xmlns:quux="bar"/> tag should be {bar}foo');
+  assert.equal(XML('<foo xmlns="bar"><subfoo/></foo>').find('*').tag, '{bar}subfoo',
+               '<foo xmlns="bar"><subfoo/></foo> tag should be {bar}foo');
+  assert.equal(XML('<quux:foo xmlns:quux="bar"><quux:subfoo/></quux:foo>').find('*').tag, '{bar}subfoo',
+               '<quux:foo xmlns:quux="bar"><quux:subfoo/></quux:foo> tag should be {bar}foo');
+  test.finish();
+};
+
 exports['test_tostring'] = function(test, assert) {
   var a = Element('a');
   var b = SubElement(a, 'b');

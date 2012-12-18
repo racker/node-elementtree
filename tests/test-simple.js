@@ -207,7 +207,7 @@ exports['test_namespaced_attribute'] = function(test, assert) {
   var data = readFile('xml1.xml');
   var etree = et.parse(data);
 
-  assert.equal(etree.findall('*/bytes[@android:type="cool"]').length, 1);
+  assert.equal(etree.findall('*/bytes[@{http://schemas.android.com/apk/res/android}type="cool"]').length, 1);
 
   test.finish();
 }

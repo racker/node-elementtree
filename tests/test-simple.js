@@ -270,6 +270,24 @@ exports['test_clark_parse_element'] = function(test, assert) {
   test.finish();
 };
 
+exports['test_clark_parse_attribute'] = function(test, assert) {
+  // attributes should be qualified only when a prefix is used
+  assert.equal(Object.keys(XML('<foo quux="3" />').attrib), 'quux',
+               '<foo quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<foo xmlns="bar-ns" quux="3" />').attrib), 'xmlns,quux',
+               '<foo xmlns="bar-ns" quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<bar:foo xmlns:bar="bar-ns" quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,quux',
+              '<bar:foo xmlns:bar="bar-ns" quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<bar:foo xmlns:bar="bar-ns" bar:quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,{bar-ns}quux',
+              '<bar:foo xmlns:bar="bar-ns" bar:quux="3" /> attribute should be {bar-ns}quux');
+  assert.equal(Object.keys(XML('<foo xmlns:bar="bar-ns" bar:quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,{bar-ns}quux',
+              '<foo xmlns:bar="bar-ns" bar:quux="3" /> attribute should be {bar-ns}quux');
+  test.finish();
+};
+
 exports['test_tostring'] = function(test, assert) {
   var a = Element('a');
   var b = SubElement(a, 'b');

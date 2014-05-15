@@ -337,14 +337,3 @@ exports['test_cdata_write'] = function(test, assert) {
 
   test.finish();
 };
-
-exports['test_write_with_tail'] = function(test, assert) {
-    var content = "<?xml version='1.0' encoding='utf-8'?>\n" +
-        '<a><bar>text</bar>tail</a>';
-    var etree = new ElementTree();
-    var xml = etree.parse(content);
-    var out = etree.write(xml);
-    assert.equal(content,out);
-    test.finish();
-};
-

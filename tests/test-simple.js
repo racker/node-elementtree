@@ -207,7 +207,7 @@ exports['test_namespaced_attribute'] = function(test, assert) {
   var data = readFile('xml1.xml');
   var etree = et.parse(data);
 
-  assert.equal(etree.findall('*/bytes[@android:type="cool"]').length, 1);
+  assert.equal(etree.findall('*/bytes[@{http://schemas.android.com/apk/res/android}type="cool"]').length, 1);
 
   test.finish();
 }
@@ -253,6 +253,38 @@ exports['test_register_namespace'] = function(test, assert){
   }
 
   assert.equal(errCount, 1, 'Reserved prefix used, but exception was not thrown');
+  test.finish();
+};
+
+exports['test_clark_parse_element'] = function(test, assert) {
+  assert.equal(XML('<foo/>').tag, 'foo',
+               '<foo/> tag should be foo');
+  assert.equal(XML('<foo xmlns="bar"/>').tag, '{bar}foo',
+               '<foo xmlns="bar"/> tag should be {bar}foo');
+  assert.equal(XML('<quux:foo xmlns:quux="bar"/>').tag, '{bar}foo',
+               '<quux:foo xmlns:quux="bar"/> tag should be {bar}foo');
+  assert.equal(XML('<foo xmlns="bar"><subfoo/></foo>').find('*').tag, '{bar}subfoo',
+               '<foo xmlns="bar"><subfoo/></foo> tag should be {bar}foo');
+  assert.equal(XML('<quux:foo xmlns:quux="bar"><quux:subfoo/></quux:foo>').find('*').tag, '{bar}subfoo',
+               '<quux:foo xmlns:quux="bar"><quux:subfoo/></quux:foo> tag should be {bar}foo');
+  test.finish();
+};
+
+exports['test_clark_parse_attribute'] = function(test, assert) {
+  // attributes should be qualified only when a prefix is used
+  assert.equal(Object.keys(XML('<foo quux="3" />').attrib), 'quux',
+               '<foo quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<foo xmlns="bar-ns" quux="3" />').attrib), 'xmlns,quux',
+               '<foo xmlns="bar-ns" quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<bar:foo xmlns:bar="bar-ns" quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,quux',
+              '<bar:foo xmlns:bar="bar-ns" quux="3" /> attribute should be quux');
+  assert.equal(Object.keys(XML('<bar:foo xmlns:bar="bar-ns" bar:quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,{bar-ns}quux',
+              '<bar:foo xmlns:bar="bar-ns" bar:quux="3" /> attribute should be {bar-ns}quux');
+  assert.equal(Object.keys(XML('<foo xmlns:bar="bar-ns" bar:quux="3" />').attrib),
+              '{http://www.w3.org/2000/xmlns/}bar,{bar-ns}quux',
+              '<foo xmlns:bar="bar-ns" bar:quux="3" /> attribute should be {bar-ns}quux');
   test.finish();
 };
 

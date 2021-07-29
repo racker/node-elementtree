@@ -11,9 +11,9 @@ Installation
 Using the library
 ====================
 
-For the usage refer to the Python ElementTree library documentation - [http://effbot.org/zone/element-index.htm#usage](http://effbot.org/zone/element-index.htm#usage).
+For the usage refer to the Python ElementTree library documentation - [https://docs.python.org/3/library/xml.etree.elementtree.html](https://docs.python.org/3/library/xml.etree.elementtree.html).
 
-Supported XPath expressions in `find`, `findall` and `findtext` methods are listed on [http://effbot.org/zone/element-xpath.htm](http://effbot.org/zone/element-xpath.htm).
+Supported XPath expressions in `find`, `findall` and `findtext` methods are listed on [https://docs.python.org/3/library/xml.etree.elementtree.html#supported-xpath-syntax](https://docs.python.org/3/library/xml.etree.elementtree.html#supported-xpath-syntax).
 
 Example 1 – Creating An XML Document
 ====================
